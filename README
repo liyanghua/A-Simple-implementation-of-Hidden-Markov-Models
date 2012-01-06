@@ -1,0 +1,21 @@
+This is a simple implementation for HMM using boost ulas libary.
+Please refer to the paperi:A Revealing Introduction to Hidden Markov Models
+for more details.
+
+INSTALL:
+first, please make sure get boost installed.
+and run the following commad lines:
+cd you_path_to_HMM/
+make
+and then run:
+./hmm 2 3
+
+The first parameter dentoes the number of state and
+the second denotes the number of the Observation symbols.
+
+If you encount any problems, please contact me:
+
+time.clifford@gmail.com
+
+
+
