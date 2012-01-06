@@ -33,7 +33,7 @@ bool debug = true;
 class HMM {
     public:
         void init(const int n, const int m);
-		void init_with_random(const int n, const int m);
+	void init_with_random(const int n, const int m);
         void set_seq_num(const int t) { T = t; }
 
         // estimate (A, B, PI) given the initial values
@@ -48,41 +48,6 @@ class HMM {
         // discover the hidden state sequence that was most likely to have
         // produced a given observation sequence.
         void viterbi(const boost_ublas::vector<int>& O, boost_ublas::vector<int>& S);
-
-        void test_viterbi() {
-            reset();
-
-            N = 2;
-            M = 3;
-
-            A(0,0) = 0.7;
-            A(0,1) = 0.3;
-            A(1,0) = 0.4;
-            A(1,1) = 0.6;
-
-            B(0,0) = 0.1;
-            B(0,1) = 0.4;
-            B(0,2) = 0.5;
-            B(1,0) = 0.7;
-            B(1,1) = 0.2;
-            B(1,2) = 0.1;
-
-            PI(0) = 0.6;
-            PI(1) = 0.4;
-
-            boost_ublas::vector<int> O(4);
-            O(0) = 0;
-            O(1) = 1;
-            O(2) = 0;
-            O(3) = 2;
-            
-            T = 4;
-            boost_ublas::vector<int> S;
-
-            viterbi(O,S);
-            cout << S << endl;
-
-        }
 
     private:
         // The number of states
@@ -105,32 +70,31 @@ class HMM {
 };
 
 int generate_k_random_integers(std::vector<int>& s, int upper_bound, int k) {
-	s.clear();
-	s.reserve(k);
+    s.clear();
+    s.reserve(k);
 	
-	int sum = 0;
+    int sum = 0;
     boost::mt19937 rng;   
     boost::uniform_int<> g(1, upper_bound);
     for (size_t i=0; i<(size_t)k; ++i) {
         int x = g(rng);
-		sum += x;
+	sum += x;
         s.push_back(x);
     }
 	
-	return sum;
+    return sum;
 }
 
 
 ////////////////////////////The implementation of HMM
 void HMM::init_with_random(const int n, const int m) {
-	N = n;
-	M = m;
-	
-	std::vector<int> s;
-	int factor = 5;
-	int sum = generate_k_random_integers(s, N * factor, N);
-	
-	PI.resize(N);
+    N = n;
+    M = m;
+    std::vector<int> s;
+    int factor = 5;
+    int sum = generate_k_random_integers(s, N * factor, N);
+
+    PI.resize(N);
     for (int i=0; i<N; ++i) {
         PI(i) = s[i] / (double) sum;
     }
@@ -269,18 +233,18 @@ void HMM::estimate_hmm(const boost_ublas::vector<int>& O) {
     int max_iters = 100;
     int iters = 0;
     double oldLogProb = -999999; // give a very small value
-	// T = |O|  
+    // T = |O|  
     set_seq_num(O.size());
     // the forward prob
     boost_ublas::matrix<double> a(T, N);
     // the scale factors 
     boost_ublas::vector<double> c(T);
-	// the backward prob
-	boost_ublas::matrix<double> b(T, N);
-	// r(t)(i,j): the prob of being in state i at the time t and in state j at time t+1
+    // the backward prob
+    boost_ublas::matrix<double> b(T, N);
+    // r(t)(i,j): the prob of being in state i at the time t and in state j at time t+1
     // R(t)(i): the prob of being in state i at time t, given the observation sequence
     boost_ublas::vector<boost_ublas::matrix<double> > r(T-1);
-	boost_ublas::matrix<double> R(T-1,N);
+    boost_ublas::matrix<double> R(T-1,N);
 	
     while (true) {
         // step 2: compute a(t)(i)
@@ -435,7 +399,7 @@ int main(int argc, char* argv[]) {
     hmm.init(N, M);
 
     boost_ublas::vector<int> O(M * 2);
-	boost::mt19937 rng;   
+    boost::mt19937 rng;   
     boost::uniform_int<> g(0, M-1);
     for (int i=0; i<M * 2; ++i) {
         O(i) = g(rng);
@@ -453,10 +417,6 @@ int main(int argc, char* argv[]) {
     hmm.viterbi(O,S);
     cout << "The best state sequence is:" << endl;
     cout << S << endl;
-
-    // case 3: verify viterbi using the example in the paper: A Revealing Introduction to Hidden Markov Models
-    hmm.test_viterbi();
-
 
     return 0;
 }

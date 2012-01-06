@@ -1,5 +1,5 @@
 This is a simple implementation for HMM using boost ulas libary.
-Please refer to the paperi:A Revealing Introduction to Hidden Markov Models
+Please refer to the paper:A Revealing Introduction to Hidden Markov Models
 for more details.
 
 INSTALL:
